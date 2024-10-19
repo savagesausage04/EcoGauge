@@ -49,7 +49,7 @@ class ReviewContainer:
         random.shuffle(self.reviews)
 
 
-file_name = './Downloads/books_small_10000.json'
+file_name = '/Users/kylehan/Downloads/Books_small_10000.json'
 
 reviews = []
 
@@ -123,7 +123,7 @@ print(f'This is the initial log model accuracy: {clf_log.score(testing_x_vectors
 f1_score(testing_y, clf_svm.predict(testing_x_vectors), average=None, labels=[Sentiment.POSITIVE, Sentiment.NEGATIVE])
 
 
-test_set = ['wow, best in the world', "bad book do not buy", "horrible waste of time"]
+test_set = ['the customer service was not that great given the fact that they served me raw chicken', "wow this restaurant is really favorable", "horrible waste of time"]
 new_test = vectorizer.transform(test_set)
 print('\n')
 print(test_set)
