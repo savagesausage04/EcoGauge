@@ -62,7 +62,7 @@ yelp_reviews = []
 with open(yelp_file) as y:
     i = 0
     for line in y:
-        if i < 6:
+        if i < 100:
             line_dict = json.loads(line)
             review_text = line_dict["text"]
             yelp_reviews.append(review_text)
@@ -166,7 +166,9 @@ total_sentiments = len(sentiment_list)
 proportions = {label: count / total_sentiments for label, count in sentiment_counts.items()}
 proportions_list = list(proportions.values())
 keys = ["Negative", "Positive", "Neutral"]
+print(proportions_list)
 
 palette_color = seaborn.color_palette('bright')
 plt.pie(proportions_list, labels=keys, colors=palette_color, autopct='%.0f%%')
+plt.title("Distribution of Media Sentiment towards Sustainability Topic")
 plt.show()
