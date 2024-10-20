@@ -1,4 +1,5 @@
 import reflex as rx
+from Sentiment.main import analyze_sentiment # Import your sentiment analysis function
 
 colors = {
     "background": "#E6E6FA",  # Lavender purple
@@ -39,9 +40,11 @@ fruits = [
 class State(rx.State):
     business_id: str = ""
     show_results: bool = False
+    sentiment_results: list = []
 
     def submit(self):
         if self.business_id:
+            self.sentiment_results = analyze_sentiment(self.business_id)
             self.show_results = True
 
     def go_back(self):
@@ -87,7 +90,7 @@ def home_page():
         rx.vstack(
             rx.text("What can I review for you today?", color=colors["text"], font_size="1.5em", margin_bottom="1em"),
             rx.input(
-                placeholder="Enviromental Topic: ",
+                placeholder="Environmental Topic: ",
                 on_change=State.set_business_id,
                 on_key_down=State.handle_key_press,
                 value=State.business_id,
@@ -132,11 +135,11 @@ def home_page():
 
 def results_page():
     return rx.vstack(
-        rx.text(f"Enviromental Idea: {State.business_id}", color=colors["accent_green"], font_size="1.5em", margin_bottom="1em"),
+        rx.text(f"Environmental Idea: {State.business_id}", color=colors["accent_green"], font_size="1.5em", margin_bottom="1em"),
         rx.hstack(
             rx.box(
                 rx.text("Results:", color=colors["accent_blue"], font_weight="bold", font_size="1.2em"),
-                rx.text("Data goes here", color=colors["text"]),
+                rx.text(State.sentiment_results, color=colors["text"]),
                 background=colors["input_bg"],
                 padding="1.5em",
                 border_radius="0.5em",
@@ -146,8 +149,8 @@ def results_page():
                 overflow="auto",
             ),
             rx.box(
-                rx.text("Next Steps:", color=colors["accent_blue"], font_weight="bold", font_size="1.2em"),
-                rx.text("Steps go here", color=colors["text"]),
+                rx.text("Sentiment Distribution:", color=colors["accent_blue"], font_weight="bold", font_size="1.2em"),
+                rx.image(src="/sentiment_chart.png", height="250px", width="auto"),
                 background=colors["input_bg"],
                 padding="1.5em",
                 border_radius="0.5em",
