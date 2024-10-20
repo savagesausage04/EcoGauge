@@ -23,6 +23,44 @@ button_hover_effects = """
     </style>
 """
 
+# Adjust the duration for the scrolling animation to make it slower
+anime_duration = 60  # seconds
+
+fruits = [
+    "Apple", "Apricot", "Avocado", "Banana", "Bilberry", "Blackberry", "Blackcurrant",
+    "Blueberry", "Boysenberry", "Currant", "Cherry", "Cherimoya", "Chico fruit",
+    "Cloudberry", "Coconut", "Cranberry", "Cucumber", "Custard apple", "Damson", "Date"
+]
+
+reverted_scrolling_text = f'''
+<style>
+@keyframes scrolling-text {{
+  0% {{ transform: translateX(100%); }}
+  100% {{ transform: translateX(-100%); }}
+}}
+.scrolling-container {{
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  background: rgba(0, 122, 204, 0.1);
+  padding: 10px 0;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}}
+.scrolling-text {{
+  display: inline-block;
+  animation: scrolling-text {anime_duration}s linear infinite;
+}}
+</style>
+<div class="scrolling-container">
+  <div class="scrolling-text">
+    {' &nbsp;&nbsp;&nbsp; '.join(fruits)} &nbsp;&nbsp;&nbsp;
+    {' &nbsp;&nbsp;&nbsp; '.join(fruits)}
+  </div>
+</div>
+'''
+
 class State(rx.State):
     business_id: str = ""
     show_results: bool = False
@@ -42,7 +80,7 @@ class State(rx.State):
 def header():
     return rx.box(
         rx.hstack(
-            rx.heading("Name", color=colors["accent_green"], font_size="1.5em"),
+            rx.heading("Business Review", color=colors["accent_green"], font_size="1.5em"),
             rx.spacer(),
             width="100%",
             padding="0 1em",
@@ -79,6 +117,14 @@ def home_page():
                 margin_top="1em",
                 class_name="hover-button",
             ),
+            rx.spacer(),
+            rx.box(
+                rx.html(reverted_scrolling_text),
+                width="100%",
+                height="50px",
+                position="relative",
+                overflow="hidden",
+            ),
             spacing="1em",
             width="80%",
             max_width="600px",
@@ -86,7 +132,9 @@ def home_page():
             padding="2em",
             background="rgba(255, 255, 255, 0.8)",
             border_radius="1em",
-            margin_top="40px",  # Changed from 80px to 40px
+            margin_top="40px",
+            height="400px",
+            position="relative",
         ),
         height="100vh",
         width="100%",
