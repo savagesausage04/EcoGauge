@@ -68,8 +68,8 @@ def header():
 def scrolling_text():
     return rx.box(
         rx.hstack(
-            rx.text(" ".join(fruits + fruits), white_space="nowrap"),
-            rx.text(" ".join(fruits + fruits), white_space="nowrap"),
+            rx.text(" ".join(fruits + fruits), white_space="nowrap", color="black"),
+            rx.text(" ".join(fruits + fruits), white_space="nowrap", color="black"),
             animation="scroll 60s linear infinite",
             width="fit-content",
         ),
@@ -81,6 +81,7 @@ def scrolling_text():
         bottom="0",
         left="0",
     )
+
 
 def home_page():
     return rx.center(
