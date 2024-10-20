@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 
 
+
 def scrape_threads(url):
     # Set up Chrome options
     chrome_options = Options()
@@ -48,7 +49,7 @@ def scrape_threads(url):
 
 
 # URL of the Threads page you want to scrape
-topic = "Taylor Swift"
+topic = "Input"
 
 
 topics = topic.split()

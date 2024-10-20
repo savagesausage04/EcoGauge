@@ -12,6 +12,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import f1_score
 from collections import Counter
+from reflex_pyplot import pyplot
 
 API_KEY = 'AIzaSyA-Y9XSXMfroQnyOgzpfuW6fS0M4vlIrRI'
 
@@ -166,10 +167,10 @@ keys = ["Negative", "Positive", "Neutral"]
 print(proportions_list)
 
 palette_color = seaborn.color_palette('bright')
-plt.pie(proportions_list, labels=keys, colors=palette_color, autopct='%.0f%%')
-plt.title("Distribution of Media Sentiment towards Sustainability Topic")
-plt.savefig('assets/sentiment_chart.png')
-plt.close()
+# plt.pie(proportions_list, labels=keys, colors=palette_color, autopct='%.0f%%')
+# plt.title("Distribution of Media Sentiment towards Sustainability Topic")
+# plt.savefig('assets/sentiment_chart.png')
+# plt.close()
 
 
 genai.configure(api_key=API_KEY)
