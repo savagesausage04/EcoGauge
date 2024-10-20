@@ -48,7 +48,7 @@ def scrape_threads(url):
 
 
 # URL of the Threads page you want to scrape
-topic = "Input"
+topic = "Taylor Swift"
 
 
 topics = topic.split()

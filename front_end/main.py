@@ -17,6 +17,7 @@ API_KEY = 'AIzaSyA-Y9XSXMfroQnyOgzpfuW6fS0M4vlIrRI'
 
 import google.generativeai as genai
 import os
+from webscrapyer import thread_list
 
 
 
@@ -60,19 +61,10 @@ class ReviewContainer:
         random.shuffle(self.reviews)
 
 
-file_name = '/Users/kylehan/Downloads/Books_small_10000.json'
+file_name = '/Users/aaronnguyen/Desktop/Books_small_10000.json'
 
-yelp_file = '/Users/kylehan/Downloads/yelp_dataset/yelp_academic_dataset_review.json'
 
-yelp_reviews = []
-with open(yelp_file) as y:
-    i = 0
-    for line in y:
-        if i < 10:
-            line_dict = json.loads(line)
-            review_text = line_dict["text"]
-            yelp_reviews.append(review_text)
-            i += 1
+yelp_reviews = thread_list
 
 
 reviews = []
@@ -176,7 +168,7 @@ print(proportions_list)
 palette_color = seaborn.color_palette('bright')
 plt.pie(proportions_list, labels=keys, colors=palette_color, autopct='%.0f%%')
 plt.title("Distribution of Media Sentiment towards Sustainability Topic")
-plt.savefig('/frontend/assets/sentiment_chart.png')
+plt.savefig('assets/sentiment_chart.png')
 plt.close()
 
 
