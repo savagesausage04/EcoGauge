@@ -32,6 +32,9 @@ colors = {
     "input_bg": "#f0f0f0",  # Light gray for input background
     "input_text": "#333333",  # Dark gray for input text
     "hover_teal": "#2BB673",  # Darker teal for button hover
+    "white": "#FFFFFF",
+    "light_green": "#6cc767",
+
 }
 
 button_hover_effects = """
@@ -56,25 +59,45 @@ custom_css = """
 
 fruits = [
     "Pollution",
+    "☘︎",
     "Ecosystems",
+    "☘︎",
     "Biodiversity",
+    "☘︎",
     "Footprint",
+    "☘︎",
     "Recycle",
+    "☘︎",
     "Agriculture",
+    "☘︎",
     "Resources",
+    "☘︎",
     "Energy",
+    "☘︎",
     "Solar",
+    "☘︎",
     "Geothermal",
+    "☘︎",
     "Emissions",
+    "☘︎",
     "Global Warming",
+    "☘︎",
     "Environmental Activism",
+    "☘︎",
     "Urban Planning",
+    "☘︎",
     "Climate",
+    "☘︎",
     "Carbon Neutral",
+    "☘︎",
     "Biomass",
+    "☘︎",
     "Wind Power",
+    "☘︎",
     "Electricity",
+    "☘︎",
     "Greenhouse Gas",
+    "☘︎",
 ]
 
 
@@ -82,10 +105,15 @@ class State(rx.State):
     business_id: str = ""
     show_results: bool = False
     next_steps: List[str] = []
+    sentiment_summary: str = ""
 
     plot_figure_data = [5, 5, 5]
     plot_figure_labels = ["Negative", "Positive", "Neutral"]
     saved_figure = False
+    show_about_us: bool = False
+
+    def toggle_about_us(self):
+        self.show_about_us = not self.show_about_us
 
     # def get_pyplot(self):
     #     data: dict = {}
@@ -99,6 +127,7 @@ class State(rx.State):
         fig, ax = plt.subplots()
         ax.pie(sizes, labels=labels)
         return fig
+    
 
     def submit(self):
         if self.business_id:
@@ -274,6 +303,25 @@ class State(rx.State):
                 f"Here are some of the comments related to {topics}. Take some of the criticisms and offer some points of future improvements. Make the feedback short with 3 improvements and each one sentence. The text that follows are the comments: {yelp_reviews}. Don't bold the titles please"
             )
             response_text = response.text
+
+
+
+            negative = proportions_list[0]
+            positive = proportions_list[1]
+            neutral = proportions_list[2]
+
+            if negative >= positive:
+              self.sentiment_summary = f'The public sentiment for {topic} is overwhelmingly negative with {negative:.1%} negative.'
+            elif positive > negative:
+                self.sentiment_summary = f'The public sentiment for {topic} is overwhelmingly positive with {positive:.1%} positive.'
+            else:
+                self.sentiment_summary = f'The public sentiment for {topic} is overall neutral with {neutral:.1%} neutral.'
+
+            
+            
+
+
+
             self.next_steps = [
                 step.strip() for step in response_text.split("\n") if step.strip()
             ]
@@ -289,14 +337,27 @@ class State(rx.State):
     def get_search_text(self):
         pass
 
+    
+
+    
+
 
 def header():
     return rx.box(
         rx.hstack(
             rx.heading(
-                "Business Review", color=colors["accent_green"], font_size="1.5em"
+                "EcoGauge", color=colors["accent_green"], font_size="1.5em"
             ),
             rx.spacer(),
+            rx.button(
+                "About Us",
+                on_click=State.toggle_about_us,
+                background=colors["accent_green"],
+                color=colors["text"],
+                padding="0.5em 1em",
+                border_radius="0.3em",
+                class_name="hover-button",
+            ),
             width="100%",
             padding="0 1em",
         ),
@@ -305,6 +366,77 @@ def header():
         background=colors["accent_blue"],
     )
 
+def about_us_page():
+    return rx.center(
+        rx.vstack(
+            rx.hstack(
+                rx.text(
+                    "About Us",
+                    color=colors["accent_blue"],
+                    font_size="2.5em",
+                    margin_bottom="0.2em",
+                ),
+                rx.spacer(),
+                rx.button(
+                    "Back to Home",
+                    on_click=State.toggle_about_us,
+                    background=colors["accent_green"],
+                    color=colors["text"],
+                    padding="0.5em 1em",
+                    border_radius="0.3em",
+                    class_name="hover-button",
+                ),
+                width="100%",
+                padding="1em",
+            ),
+            rx.box(
+                rx.text(
+                  """1. Who this helps:
+
+a) Environmental Activists & Organizations: EcoGauge empowers sustainability advocates, nonprofits, and researchers by providing real-time insights into public sentiment on environmental issues. It helps them stay informed about public opinion, identify areas for improvement in communication, and tailor their strategies based on public perception.
+
+b) Policymakers & Corporations: It enables policymakers and businesses with sustainable initiatives to understand public concerns or enthusiasm regarding specific environmental topics (e.g., renewable energy, climate change, sustainable farming). By identifying positive and negative trends, these stakeholders can align their policies or business strategies with public interests.
+
+c) General Public: The tool offers transparency, allowing the public to see how environmental topics are perceived on a larger scale and encouraging more informed discussions about sustainability issues.
+
+2. Why is this impactful:
+
+a) Driving Informed Change: EcoGauge helps amplify voices in the sustainability space by surfacing sentiment data that can influence decisions and communication strategies. For example, if negative sentiment around sustainable farming is detected, advocates can intervene with better education or outreach efforts to clarify misconceptions.
+
+b) Enabling Efficient Action: With clear visual insights like sentiment pie charts, organizations can prioritize issues based on real-time feedback and act on the public's concerns more efficiently, driving faster solutions to environmental challenges.
+
+c) Facilitating Feedback Loops: The Gemini feedback mechanism adds value by directly engaging with the sentiment data, generating automatic feedback or responses to common concerns. This creates a continuous loop where organizations and the public can interact with real-time data.
+
+3. Why is this unique:
+
+a) Sentiment + Feedback in One: Unlike many sentiment analysis tools that only provide data, EcoGauge takes it further by using Gemini's feedback to address the underlying concerns in threads. This dual approach enables proactive engagement rather than passive observation.
+
+b) Niche Focus on Sustainability: By specializing in environmental and sustainable topics, EcoGauge targets a vital global issue and becomes an indispensable tool for those working toward positive environmental impact.
+
+c) Web Scraping Precision: The combination of thread scraping and sentiment analysis gives a more grassroots view of public opinion, capturing the nuances of how everyday people are talking about sustainability across forums and social platforms.""",
+                    color=colors["text"],
+                    white_space="pre-wrap",
+                ),
+                background=colors["input_bg"],
+                padding="2em",
+                border_radius="0.5em",
+                width="90%",
+                max_width="800px",
+                height="70vh",
+                overflow="auto",
+                border=f"1px solid {colors['accent_blue']}",
+            ),
+            width="100%",
+            max_width="1000px",
+            align_items="center",
+            justify_content="center",
+            padding="2em",
+            spacing="1em",
+        ),
+        height="100vh",
+        width="100%",
+        background=colors["background"],
+    )
 
 def scrolling_text():
     return rx.box(
@@ -324,17 +456,19 @@ def scrolling_text():
     )
 
 
+
+
 def home_page():
     return rx.center(
         rx.vstack(
             rx.text(
-                "What can I review for you today?",
+                "Curious about any environmental topics? ",
                 color=colors["text"],
                 font_size="1.5em",
                 margin_bottom="1em",
             ),
             rx.input(
-                placeholder="Enviromental Topic: ",
+                placeholder="Environmental Topic: ",
                 on_change=State.set_business_id,
                 on_key_down=State.handle_key_press,
                 value=State.business_id,
@@ -378,6 +512,8 @@ def home_page():
     )
 
 
+
+
 # def make_pyplot_graph():
 #     fig, ax = plt.subplots()
 #     # plt.pie(State.plot_figure_data, labels=State.plot_figure_labels, autopct="%1.1f%%",startangle=90)
@@ -387,91 +523,114 @@ def home_page():
 #     return pyplot(fig)
 
 
+
 def results_page():
-    return rx.vstack(
-        rx.text(
-            f"Environmental Idea: {State.business_id}",
-            color=colors["accent_green"],
-            font_size="1.5em",
-            margin_bottom="1em",
-        ),
-        rx.hstack(
-            rx.box(
-                rx.text(
-                    "Results:",
-                    color=colors["accent_blue"],
-                    font_weight="bold",
-                    font_size="1.2em",
-                ),
-                # rx.image(src="url('/sentiment_chart.png')", width="100%", height="auto"),
-                rx.cond(
-                    State.saved_figure,
-                    pyplot(
-                        State.pie_maker,
-                        width="100%",
-                        height="height",
-                    ),
-                    rx.text("Figure should go here"),
-                ),
-                background=colors["input_bg"],
-                padding="1.5em",
-                border_radius="0.5em",
-                width="48%",
-                height="500px",
-                border=f"1px solid {colors['accent_blue']}",
-                overflow="auto",
+    return rx.center(
+        rx.vstack(
+            rx.text(
+                f"Environmental Analysis: {State.business_id}",
+                color=colors["white"],
+                font_size="2.5em",
+                margin_bottom="1em",
             ),
-            rx.box(
-                rx.text(
-                    "Next Steps:",
-                    color=colors["accent_blue"],
-                    font_weight="bold",
-                    font_size="1.2em",
-                ),
-                rx.vstack(
-                    rx.foreach(
-                        State.next_steps,
-                        lambda step, i: rx.hstack(
-                            rx.text(
-                                font_weight="bold", margin_right="0.5em", color="black"
+            rx.hstack(
+                rx.box(
+                    rx.text(
+                        "Results:",
+                        color=colors["accent_blue"],
+                        font_weight="bold",
+                        font_size="1.2em",
+                    ),
+                    rx.cond(
+                        State.saved_figure,
+                        rx.vstack(
+                            pyplot(
+                                State.pie_maker,
+                                width="100%",
+                                height="height",
                             ),
-                            rx.text(step, color="black"),  # Changed text color to black
+                            rx.text(
+                                State.sentiment_summary,
+                                color="black",
+                                font_size="1em",
+                                margin_top="0.25em",
+                                text_align="center",
+                            ),
                             width="100%",
-                            align_items="flex-start",
-                            margin_bottom="0.5em",
                         ),
+                        rx.text("Figure should go here"),
                     ),
-                    align_items="flex-start",
-                    width="100%",
+                    background=colors["input_bg"],
+                    padding="1.5em",
+                    border_radius="0.5em",
+                    width="52%",
+                    height="500px",
+                    border=f"1px solid {colors['accent_blue']}",
+                    overflow="auto",
                 ),
-                background=colors["input_bg"],
-                padding="1.5em",
-                border_radius="0.5em",
-                width="48%",
-                height="500px",
-                border=f"1px solid {colors['accent_blue']}",
-                overflow="auto",
+                rx.box(
+                    rx.text(
+                        "Next Steps:",
+                        color=colors["accent_blue"],
+                        font_weight="bold",
+                        font_size="1.2em",
+                    ),
+                    rx.vstack(
+                        rx.foreach(
+                            State.next_steps,
+                            lambda step, i: rx.hstack(
+                                rx.text(
+                                    font_weight="bold",
+                                    margin_right="0.5em",
+                                    color="black"
+                                ),
+                                rx.text(step, color="black"),
+                                width="100%",
+                                align_items="flex-start",
+                                margin_bottom="0.5em",
+                            ),
+                        ),
+                        align_items="flex-start",
+                        width="100%",
+                    ),
+                    background=colors["input_bg"],
+                    padding="1.5em",
+                    border_radius="0.5em",
+                    width="52%",
+                    height="500px",
+                    border=f"1px solid {colors['accent_blue']}",
+                    overflow="auto",
+                ),
+                width="100%",
+                justify_content="space-between",
+                margin_top="1em",
             ),
-            width="100%",
-            justify_content="space-between",
-            margin_top="1em",
+            rx.button(
+                "Back",
+                on_click=State.go_back,
+                background=colors["accent_green"],
+                color=colors["text"],
+                padding="0.5em 2em",
+                border_radius="0.3em",
+                margin_top="2em",
+                class_name="hover-button",
+            ),
+            width="90%",
+            max_width="1000px",
+            align_items="center",
+            padding="2em",
+            margin="0 auto",
         ),
-        rx.button(
-            "Back",
-            on_click=State.go_back,
-            background=colors["accent_green"],
-            color=colors["text"],
-            padding="0.5em 2em",
-            border_radius="0.3em",
-            margin_top="2em",
-            class_name="hover-button",
-        ),
-        width="90%",
-        max_width="1000px",
-        align_items="center",
-        padding="2em",
-        margin="0 auto",
+        style={
+            "background": colors["light_green"],
+            "minHeight": "100vh",
+            "padding": "20px",
+        }
     )
+
+
+
+
 
 
 def index():
@@ -480,14 +639,19 @@ def index():
         rx.html(f"<style>{custom_css}</style>"),
         header(),
         rx.cond(
-            State.show_results,
-            results_page(),
-            home_page(),
+            State.show_about_us,
+            about_us_page(),
+            rx.cond(
+                State.show_results,
+                results_page(),
+                home_page(),
+            ),
         ),
         width="100%",
         height="100vh",
         overflow="hidden",
     )
+
 
 
 app = rx.App()
