@@ -1,3 +1,5 @@
+EcoGauge empowers activists, policymakers, and the public with real-time sentiment insights on environmental issues, driving informed change and efficient action.
+
 1. Who this helps:
 
 a) Environmental Activists & Organizations: EcoGauge empowers sustainability advocates, nonprofits, and researchers by providing real-time insights into public sentiment on environmental issues. It helps them stay informed about public opinion, identify areas for improvement in communication, and tailor their strategies based on public perception.
