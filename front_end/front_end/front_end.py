@@ -18,7 +18,6 @@ from typing import List
 from reflex_pyplot import pyplot
 
 
-API_KEY = "AIzaSyA-Y9XSXMfroQnyOgzpfuW6fS0M4vlIrRI"
 
 import google.generativeai as genai
 import os
